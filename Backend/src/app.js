@@ -31,10 +31,16 @@ import { errorHandler } from './middlewares/errorMiddleware.js'
 
 dotenv.config()
 const app = express()
-const demo = process.env.DEMO_MODE === 'true'
+const onVercel = process.env.VERCEL === '1'
+const demo = onVercel || process.env.DEMO_MODE === 'true'
 
 if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET wajib diisi')
-if (!demo) app.use(cors())
+if (onVercel) {
+  const publicOrigin = process.env.DEMO_FRONTEND_ORIGIN
+  if (publicOrigin) app.use(cors({ origin: publicOrigin }))
+} else if (!demo) {
+  app.use(cors())
+}
 app.use(express.json())
 
 app.get('/api/health', (_req, res) => {
@@ -87,7 +93,7 @@ app.use('/api', (_req, res) => {
   res.status(404).json({ status: 'error', message: 'Endpoint tidak ditemukan' })
 })
 
-if (demo) {
+if (demo && !onVercel) {
   const frontendDir = fileURLToPath(new URL('../../Frontend/dist/', import.meta.url))
   app.use(express.static(frontendDir))
   app.get('/{*spa}', (_req, res) => res.sendFile(path.join(frontendDir, 'index.html')))
@@ -96,11 +102,15 @@ if (demo) {
 // Middleware error (taruh paling bawah)
 app.use(errorHandler)
 
-const PORT = Number(process.env.PORT || 5000)
-const host = process.env.IP || '0.0.0.0'
-app.listen(PORT, host, () => {
-  console.log(chalk.cyan.bold('====================================='))
-  console.log(chalk.green.bold('🚀 Server berhasil dijalankan!'))
-  console.log(chalk.yellow(`📡 URL: http://localhost:${PORT}`))
-  console.log(chalk.cyan.bold('====================================='))
-})
+export default app
+
+if (!onVercel) {
+  const PORT = Number(process.env.PORT || 5000)
+  const host = process.env.IP || '0.0.0.0'
+  app.listen(PORT, host, () => {
+    console.log(chalk.cyan.bold('====================================='))
+    console.log(chalk.green.bold('🚀 Server berhasil dijalankan!'))
+    console.log(chalk.yellow(`📡 URL: http://localhost:${PORT}`))
+    console.log(chalk.cyan.bold('====================================='))
+  })
+}

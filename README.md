@@ -29,9 +29,18 @@ Buka [http://localhost:10000](http://localhost:10000). Container membuat basis d
 
 Hubungkan repo GitHub ke **New → Blueprint** di Render, lalu pilih repo yang berisi `render.yaml`. Blueprint menggunakan Dockerfile yang sama, membuat rahasia JWT, dan menetapkan paket **Free**. Render Free akan tidur setelah 15 menit tanpa kunjungan dan dapat memerlukan sekitar satu menit untuk aktif kembali.
 
+### Deploy ke Vercel Hobby dengan Aiven MySQL Free
+
+1. Buat layanan **MySQL Free** di Aiven. Buat database demo kosong. Impor `Backend/database/schema.sql` dan `Backend/database/demo.sql` secara berurutan lewat klien MySQL dengan TLS yang memverifikasi CA Aiven. Setelah impor, buat pengguna MySQL khusus aplikasi dan beri akses `SELECT` hanya pada database demo.
+2. Buat project Vercel untuk backend. Pilih repo ini, root directory `Backend`, dan preset **Express**. Gunakan `PUPPETEER_SKIP_DOWNLOAD=true npm ci` sebagai install command.
+3. Di pengaturan environment backend, isi `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `DB_SSL_CA_BASE64` (CA PEM dari Aiven, dienkode Base64), `JWT_SECRET` (acak), dan `DEMO_MODE=true`. Backend memakai akses baca di Vercel. Uji `/api/health` pada URL backend setelah deploy.
+4. Buat project Vercel kedua dari repo yang sama dengan root directory `Frontend` dan preset **Vite**. Isi `VITE_API_URL` dengan URL backend diikuti `/api` dan `VITE_PUBLIC_DEMO=true`.
+5. Tambahkan URL asal frontend (misalnya `https://contoh.vercel.app`) sebagai `DEMO_FRONTEND_ORIGIN` pada project backend, lalu deploy ulang backend. Coba login sebagai Admin, Guru, dan Orang tua.
+6. Laporkan hasil uji ekspor PDF secara terpisah. Ekspor bawaan membutuhkan Chromium dan setup di atas belum menyediakan binari Chromium di Vercel.
+
 ### Deploy ke alwaysdata Free
 
-Alwaysdata menyediakan hosting Node.js dan MariaDB dalam satu akun. Pilih paket **Free** untuk demo portofolio. Gunakan basis data kosong yang terpisah dan isi dengan data sintetis.
+Opsi ini tersedia jika akun alwaysdata sudah aktif. Halaman pendaftarannya dapat meminta verifikasi kartu. Alwaysdata menyediakan hosting Node.js dan MariaDB dalam satu akun. Pilih paket **Free** untuk demo portofolio. Gunakan basis data kosong yang terpisah dan isi dengan data sintetis.
 
 1. Di panel alwaysdata, pilih Node.js 22 di **Environment → Node.js**. Di **Databases → MySQL**, buat database demo, satu pengguna untuk impor, dan satu pengguna dengan hak **READONLY** pada database tersebut.
 2. Masuk ke SSH sesuai host dan username yang ditampilkan di panel. Jalankan perintah ini di sesi SSH:
