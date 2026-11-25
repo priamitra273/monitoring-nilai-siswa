@@ -5,6 +5,7 @@ import chalk from 'chalk'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import db from './config/db.js'
+import { isDemoMode } from './config/demo.js'
 import authRoutes from './routes/authRoutes.js'
 import adminKelasRoutes from './routes/admin/kelasRoutes.js'
 import adminTahunAjaranRoutes from './routes/admin/tahunAjaranRoutes.js'
@@ -32,7 +33,7 @@ import { errorHandler } from './middlewares/errorMiddleware.js'
 dotenv.config()
 const app = express()
 const onVercel = process.env.VERCEL === '1'
-const demo = onVercel || process.env.DEMO_MODE === 'true'
+const demo = isDemoMode()
 
 if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET wajib diisi')
 if (onVercel) {

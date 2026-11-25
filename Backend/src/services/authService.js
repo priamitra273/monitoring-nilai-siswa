@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import { isDemoMode } from '../config/demo.js'
 import jwt from 'jsonwebtoken'
 import { findUserWithRoleData, findUserByIdWithRoleData } from '../models/userModel.js'
 import { updateLastLogin } from '../models/userModel.js'
@@ -62,7 +63,7 @@ export const loginService = async (username, password) => {
   }
 
   // Update last login timestamp (hanya untuk login normal)
-  if (process.env.DEMO_MODE !== 'true') await updateLastLogin(user.id)
+  if (!isDemoMode()) await updateLastLogin(user.id)
 
   // Prepare JWT payload
   const payload = {

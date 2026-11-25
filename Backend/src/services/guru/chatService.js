@@ -1,3 +1,4 @@
+import { isDemoMode } from '../../config/demo.js';
 import * as chatModel from '../../models/guru/chatModel.js';
 
 /**
@@ -60,7 +61,7 @@ export const getMessagesService = async (guruId, conversationId) => {
     // Get all messages
     const messages = await chatModel.getMessagesByConversation(conversationId);
 
-    if (process.env.DEMO_MODE !== 'true') {
+    if (!isDemoMode()) {
       await chatModel.markMessagesAsRead(conversationId);
       await chatModel.resetUnreadCountGuru(conversationId);
     }
