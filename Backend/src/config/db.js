@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const secureCa = process.env.DB_SSL_CA_BASE64;
+const useTls = process.env.VERCEL === '1' || Boolean(secureCa);
 const options = {
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT || 3306),
@@ -11,18 +12,15 @@ const options = {
   user: process.env.DB_USER,
   password: process.env.DB_PASS || "",
   database: process.env.DB_NAME,
-  ...(secureCa && {
+  ...(useTls && {
     ssl: {
-      ca: Buffer.from(secureCa, 'base64'),
+      ...(secureCa && { ca: Buffer.from(secureCa, 'base64') }),
+      minVersion: 'TLSv1.2',
       rejectUnauthorized: true,
       verifyIdentity: true,
     },
   }),
 };
-
-if (process.env.VERCEL === '1' && !secureCa) {
-  throw new Error('DB_SSL_CA_BASE64 wajib diisi pada Vercel');
-}
 
 const db = process.env.VERCEL === '1'
   ? mysql.createPool({ ...options, connectionLimit: 3, maxIdle: 1, idleTimeout: 30_000 })

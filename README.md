@@ -29,11 +29,11 @@ Buka [http://localhost:10000](http://localhost:10000). Container membuat basis d
 
 Hubungkan repo GitHub ke **New → Blueprint** di Render, lalu pilih repo yang berisi `render.yaml`. Blueprint menggunakan Dockerfile yang sama, membuat rahasia JWT, dan menetapkan paket **Free**. Render Free akan tidur setelah 15 menit tanpa kunjungan dan dapat memerlukan sekitar satu menit untuk aktif kembali.
 
-### Deploy ke Vercel Hobby dengan Aiven MySQL Free
+### Deploy ke Vercel Hobby dan TiDB Cloud Starter
 
-1. Buat layanan **MySQL Free** di Aiven. Buat database demo kosong. Impor `Backend/database/schema.sql` dan `Backend/database/demo.sql` secara berurutan lewat klien MySQL dengan TLS yang memverifikasi CA Aiven. Setelah impor, buat pengguna MySQL khusus aplikasi dan beri akses `SELECT` hanya pada database demo.
+1. Di [TiDB Cloud](https://tidbcloud.com/), buat instance **Starter** dengan kompatibilitas **MySQL** dan paket gratis. Buat database kosong `monitoring_demo`, lalu gunakan klien MySQL dengan verifikasi TLS sesuai detail di menu **Connect**. Buat file impor dari folder repo dengan `node Backend/database/tidb-demo.mjs > tidb-demo.sql` (di Windows, jalankan perintah tersebut di Command Prompt). Impor file itu ke database demo. Gunakan akun tersendiri yang hanya punya hak `SELECT` pada database tersebut untuk aplikasi.
 2. Buat project Vercel untuk backend. Pilih repo ini, root directory `Backend`, dan preset **Express**. Gunakan `PUPPETEER_SKIP_DOWNLOAD=true npm ci` sebagai install command.
-3. Di pengaturan environment backend, isi `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `DB_SSL_CA_BASE64` (CA PEM dari Aiven, dienkode Base64), `JWT_SECRET` (acak), dan `DEMO_MODE=true`. Backend memakai akses baca di Vercel. Uji `/api/health` pada URL backend setelah deploy.
+3. Di pengaturan environment backend, isi `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `JWT_SECRET` (acak), dan `DEMO_MODE=true`. Backend memakai akses baca dan verifikasi TLS di Vercel. Untuk CA khusus, isi `DB_SSL_CA_BASE64` dengan sertifikat PEM yang dienkode Base64. Uji `/api/health` pada URL backend setelah deploy.
 4. Buat project Vercel kedua dari repo yang sama dengan root directory `Frontend` dan preset **Vite**. Isi `VITE_API_URL` dengan URL backend diikuti `/api` dan `VITE_PUBLIC_DEMO=true`.
 5. Tambahkan URL asal frontend (misalnya `https://contoh.vercel.app`) sebagai `DEMO_FRONTEND_ORIGIN` pada project backend, lalu deploy ulang backend. Coba login sebagai Admin, Guru, dan Orang tua.
 6. Laporkan hasil uji ekspor PDF secara terpisah. Ekspor bawaan membutuhkan Chromium dan setup di atas belum menyediakan binari Chromium di Vercel.
