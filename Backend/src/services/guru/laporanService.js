@@ -1,5 +1,6 @@
 import * as laporanModel from '../../models/guru/laporanModel.js'
 import puppeteer from 'puppeteer'
+import { renderReportPDF } from '../reportPdf.js'
 import ejs from 'ejs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -200,6 +201,8 @@ export const generatePDFPerkembanganService = async (guruId, siswaId, catatanWal
       }),
       logoBase64: logoBase64,
     }
+
+    if (process.env.VERCEL === '1') return await renderReportPDF(templateData)
 
     // Render HTML dari template EJS
     // __dirname = src/services/guru, jadi naik 2 level ke src, lalu masuk views/pdf

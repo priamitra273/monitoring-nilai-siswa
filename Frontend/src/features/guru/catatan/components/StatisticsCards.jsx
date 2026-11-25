@@ -19,7 +19,7 @@ export default function StatisticsCards({ statistik, isLoading }) {
 
   return (
     <ContentWrapper>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-4">
         <Card
           icon={<FaStickyNote className="text-2xl" />}
           title="Total Catatan"

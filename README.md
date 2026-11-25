@@ -36,7 +36,7 @@ Hubungkan repo GitHub ke **New → Blueprint** di Render, lalu pilih repo yang b
 3. Di pengaturan environment backend, isi `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `JWT_SECRET` (acak), dan `DEMO_MODE=true`. Backend memakai akses baca dan verifikasi TLS di Vercel. Untuk CA khusus, isi `DB_SSL_CA_BASE64` dengan sertifikat PEM yang dienkode Base64. Uji `/api/health` pada URL backend setelah deploy.
 4. Buat project Vercel kedua dari repo yang sama dengan root directory `Frontend` dan preset **Vite**. Isi `VITE_API_URL` dengan URL backend diikuti `/api` dan `VITE_PUBLIC_DEMO=true`.
 5. Tambahkan URL asal frontend (misalnya `https://contoh.vercel.app`) sebagai `DEMO_FRONTEND_ORIGIN` pada project backend, lalu deploy ulang backend. Coba login sebagai Admin, Guru, dan Orang tua.
-6. Laporkan hasil uji ekspor PDF secara terpisah. Ekspor bawaan membutuhkan Chromium dan setup di atas belum menyediakan binari Chromium di Vercel.
+6. Ekspor PDF di Vercel menggunakan PDFKit. Konfigurasi Docker menggunakan template EJS dengan Chromium.
 
 ### Deploy ke alwaysdata Free
 

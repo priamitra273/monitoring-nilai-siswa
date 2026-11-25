@@ -30,7 +30,7 @@ export default function FilterSection({
         secondFilterPlaceholder="Pilih Jenis"
         showFilter={true}
         showSecondFilter={true}
-        showAddButton={true}
+        showAddButton={import.meta.env.VITE_PUBLIC_DEMO !== 'true'}
         addButtonText="Tambah Catatan"
         onAddClick={handleTambahCatatan}
       />

@@ -1,5 +1,6 @@
 import laporanModel from '../../models/admin/laporanModel.js'
 import puppeteer from 'puppeteer'
+import { renderReportPDF } from '../reportPdf.js'
 import ejs from 'ejs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -191,6 +192,8 @@ export const generateTranskripPDFService = async (siswaId) => {
       catatan_wali_kelas: '',
       wali_kelas: '-',
     }
+
+    if (process.env.VERCEL === '1') return await renderReportPDF(templateData)
 
     // Render HTML dari template EJS
     // PASTIKAN: File EJS ini sudah menyertakan HTML Header/Kop Surat di dalamnya

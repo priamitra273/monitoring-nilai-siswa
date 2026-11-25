@@ -110,30 +110,34 @@ export default function ChatArea({
 
       {/* Message Input */}
       <div className="p-2 border-t border-gray-200 bg-white flex-shrink-0">
-        <form onSubmit={handleSubmit} className="flex gap-1.5 items-center">
-          <textarea
-            placeholder="Ketik pesan..."
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            disabled={isSending}
-            rows={1}
-            maxLength={1000}
-            className="flex-1 px-2.5 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none max-h-[80px] overflow-y-auto"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
-                handleSubmit(e)
-              }
-            }}
-          />
-          <button
-            type="submit"
-            disabled={!messageInput.trim() || isSending}
-            className="flex-shrink-0 w-9 h-9 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
-          >
-            <FaPaperPlane className="text-white text-xs" />
-          </button>
-        </form>
+        {import.meta.env.VITE_PUBLIC_DEMO === 'true' ? (
+          <p className="p-2 text-center text-sm text-slate-600">Riwayat chat demo hanya bisa dibaca.</p>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex gap-1.5 items-center">
+            <textarea
+              placeholder="Ketik pesan..."
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              disabled={isSending}
+              rows={1}
+              maxLength={1000}
+              className="flex-1 px-2.5 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none max-h-[80px] overflow-y-auto"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSubmit(e)
+                }
+              }}
+            />
+            <button
+              type="submit"
+              disabled={!messageInput.trim() || isSending}
+              className="flex-shrink-0 w-9 h-9 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+            >
+              <FaPaperPlane className="text-white text-xs" />
+            </button>
+          </form>
+        )}
       </div>
     </div>
   )

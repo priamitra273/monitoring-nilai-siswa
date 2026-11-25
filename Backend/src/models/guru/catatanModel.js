@@ -25,7 +25,7 @@ export const getCatatanList = (guruId, filters) => {
 
     // Search by siswa nama or isi catatan
     if (search) {
-      whereConditions.push('(s.nama_lengkap LIKE ? OR cd.pesan LIKE ?)');
+      whereConditions.push('(s.nama_lengkap LIKE ? OR EXISTS (SELECT 1 FROM catatan_detail cd WHERE cd.header_id = ch.id AND cd.pesan LIKE ?))');
       queryParams.push(`%${search}%`, `%${search}%`);
     }
 
@@ -41,6 +41,12 @@ export const getCatatanList = (guruId, filters) => {
       queryParams.push(jenis);
     }
 
+    whereConditions.push(`EXISTS (
+      SELECT 1
+      FROM kelas_siswa ks
+      JOIN tahun_ajaran ta ON ks.tahun_ajaran_id = ta.id
+      WHERE ks.siswa_id = ch.siswa_id AND ks.kelas_id = ch.kelas_id AND ta.status = 'aktif'
+    )`);
     const whereClause = whereConditions.join(' AND ');
 
     // Determine sort column
@@ -80,13 +86,9 @@ export const getCatatanList = (guruId, filters) => {
       FROM catatan_header ch
       JOIN siswa s ON ch.siswa_id = s.id
       JOIN kelas k ON ch.kelas_id = k.id
-      JOIN kelas_siswa ks ON s.id = ks.siswa_id AND k.id = ks.kelas_id
-      JOIN tahun_ajaran ta ON ks.tahun_ajaran_id = ta.id
+
       LEFT JOIN mapel m ON ch.mapel_id = m.id
-      LEFT JOIN catatan_detail cd ON ch.id = cd.header_id
       WHERE ${whereClause}
-        AND ta.status = 'aktif'
-      GROUP BY ch.id
       ORDER BY ${sortColumn} ${sortDirection}
       LIMIT ? OFFSET ?
     `;
@@ -100,15 +102,11 @@ export const getCatatanList = (guruId, filters) => {
 
       // Count total for pagination - Filter by tahun ajaran aktif
       const countQuery = `
-        SELECT COUNT(DISTINCT ch.id) as total
+        SELECT COUNT(*) as total
         FROM catatan_header ch
         JOIN siswa s ON ch.siswa_id = s.id
         JOIN kelas k ON ch.kelas_id = k.id
-        JOIN kelas_siswa ks ON s.id = ks.siswa_id AND k.id = ks.kelas_id
-        JOIN tahun_ajaran ta ON ks.tahun_ajaran_id = ta.id
-        LEFT JOIN catatan_detail cd ON ch.id = cd.header_id
         WHERE ${whereClause}
-          AND ta.status = 'aktif'
       `;
 
       db.query(countQuery, queryParams.slice(0, -2), (countError, countResults) => {

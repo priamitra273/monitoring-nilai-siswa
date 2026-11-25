@@ -138,7 +138,7 @@ export const getGuruRoleInKelas = (kelasId, guruId) => {
 export const getKelasByGuru = (guruId) => {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT DISTINCT
+      SELECT
         k.id as kelas_id,
         k.nama_kelas,
         CASE 

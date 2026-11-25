@@ -19,15 +19,17 @@ export default function ConversationList({
     <div className="w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col">
       {/* New Chat Button & Search */}
       <div className="p-3 md:p-4 border-b border-gray-200 space-y-3">
-        <Button
-          variant="primary"
-          icon={<FaPlus />}
-          onClick={onNewChatClick}
-          className="w-full"
-          size="sm"
-        >
-          New Chat
-        </Button>
+        {import.meta.env.VITE_PUBLIC_DEMO !== 'true' && (
+          <Button
+            variant="primary"
+            icon={<FaPlus />}
+            onClick={onNewChatClick}
+            className="w-full"
+            size="sm"
+          >
+            New Chat
+          </Button>
+        )}
         <div className="relative">
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
           <input

@@ -1,5 +1,6 @@
 import * as laporanModel from '../../models/ortu/laporanModel.js'
 import puppeteer from 'puppeteer'
+import { renderReportPDF } from '../reportPdf.js'
 import ejs from 'ejs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -329,6 +330,8 @@ export const generatePDFLaporanService = async (siswaId, tahunAjaranId, semester
       }),
       logoBase64: logoBase64,
     }
+
+    if (process.env.VERCEL === '1') return await renderReportPDF(templateData)
 
     // Render HTML dari template EJS
     const templatePath = path.join(__dirname, '../../views/pdf/laporan-perkembangan.ejs')
