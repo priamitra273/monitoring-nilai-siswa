@@ -29,6 +29,32 @@ Buka [http://localhost:10000](http://localhost:10000). Container membuat basis d
 
 Hubungkan repo GitHub ke **New → Blueprint** di Render, lalu pilih repo yang berisi `render.yaml`. Blueprint menggunakan Dockerfile yang sama, membuat rahasia JWT, dan menetapkan paket **Free**. Render Free akan tidur setelah 15 menit tanpa kunjungan dan dapat memerlukan sekitar satu menit untuk aktif kembali.
 
+### Deploy ke alwaysdata Free
+
+Alwaysdata menyediakan hosting Node.js dan MariaDB dalam satu akun. Pilih paket **Free** untuk demo portofolio. Gunakan basis data kosong yang terpisah dan isi dengan data sintetis.
+
+1. Di panel alwaysdata, pilih Node.js 22 di **Environment → Node.js**. Di **Databases → MySQL**, buat database demo, satu pengguna untuk impor, dan satu pengguna dengan hak **READONLY** pada database tersebut.
+2. Masuk ke SSH sesuai host dan username yang ditampilkan di panel. Jalankan perintah ini di sesi SSH:
+
+   ```sh
+   git clone https://github.com/priamitra273/monitoring-nilai-siswa.git
+   cd monitoring-nilai-siswa
+   npm --prefix Frontend ci
+   VITE_API_URL=/api VITE_PUBLIC_DEMO=true npm --prefix Frontend run build
+   PUPPETEER_SKIP_DOWNLOAD=true npm --prefix Backend ci --omit=dev
+   ```
+
+3. Impor kedua file SQL menggunakan akun impor. Ganti `HOST`, `USER_IMPOR`, dan `NAMA_DB` dengan nilai dari panel. Kedua perintah akan meminta password.
+
+   ```sh
+   mysql -h HOST -u USER_IMPOR -p NAMA_DB < Backend/database/schema.sql
+   mysql -h HOST -u USER_IMPOR -p NAMA_DB < Backend/database/demo.sql
+   ```
+
+4. Buat `Backend/.env` dari `Backend/.env.example`. Isi `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, dan `DB_PASS` memakai kredensial pengguna **READONLY**. Buat rahasia JWT baru dengan `node -p "require('node:crypto').randomBytes(32).toString('hex')"`, masukkan ke `JWT_SECRET`, dan tambahkan `DEMO_MODE=true`. Hapus baris `PORT` agar port dikelola oleh alwaysdata. Batasi akses file dengan `chmod 600 Backend/.env`.
+5. Di **Web → Sites**, pilih tipe **Node.js** dan alamat `NAMA_AKUN.alwaysdata.net` yang disediakan. Gunakan command `cd "$HOME/monitoring-nilai-siswa/Backend" && node src/app.js`. Aplikasi mengikuti IP dan port yang diberikan alwaysdata.
+6. Buka `/api/health` dan pastikan responsnya `{"status":"ok"}`. Lalu buka halaman login dan coba ketiga peran. Unduhan PDF membutuhkan Chromium. Jika tersedia di server, tambahkan `PUPPETEER_EXECUTABLE_PATH` dengan path binarinya di `Backend/.env`, restart situs, lalu uji unduhan.
+
 ### Menjalankan untuk pengembangan
 
 1. Gunakan Node.js 22. Buat basis data lokal `monitoring_ta` di MariaDB.

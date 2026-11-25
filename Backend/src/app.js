@@ -96,8 +96,9 @@ if (demo) {
 // Middleware error (taruh paling bawah)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5000
-app.listen(Number(PORT), '0.0.0.0', () => {
+const PORT = Number(process.env.PORT || 5000)
+const host = process.env.IP || '0.0.0.0'
+app.listen(PORT, host, () => {
   console.log(chalk.cyan.bold('====================================='))
   console.log(chalk.green.bold('🚀 Server berhasil dijalankan!'))
   console.log(chalk.yellow(`📡 URL: http://localhost:${PORT}`))
