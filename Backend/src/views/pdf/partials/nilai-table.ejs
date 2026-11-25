@@ -1,0 +1,34 @@
+<!-- NILAI TABEL -->
+<div class="nilai-table-section">
+  <h3>NILAI AKADEMIK</h3>
+  <table class="nilai-table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Mata Pelajaran</th>
+        <th>Nilai</th>
+        <th>Predikat</th>
+        <th>Catatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (nilai_akademik && nilai_akademik.length > 0) { %> <% nilai_akademik.forEach((nilai,
+      index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= nilai.mata_pelajaran?.nama_mapel %></td>
+        <td style="text-align: center"><%= parseFloat(nilai.nilai_akhir).toFixed(2) %></td>
+        <td style="text-align: center">
+          <% if (nilai.nilai_akhir >= 85) { %> A <% } else if (nilai.nilai_akhir >= 70) { %> B <% }
+          else if (nilai.nilai_akhir >= 55) { %> C <% } else { %> D <% } %>
+        </td>
+        <td><%= nilai.catatan || '-' %></td>
+      </tr>
+      <% }); %> <% } else { %>
+      <tr>
+        <td colspan="5" style="text-align: center; color: #999">Tidak ada data nilai</td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,64 @@
+<div class="data-siswa-section">
+  <div class="info-grid">
+    <% if (role === 'admin') { %>
+    <div class="info-label">Nama Lengkap</div>
+    <div class="info-value">: <%= siswa?.nama %></div>
+
+    <div class="info-label">Kelas Saat Ini</div>
+    <div class="info-value">: <%= siswa?.kelas %></div>
+
+    <div class="info-label">NISN</div>
+    <div class="info-value">: <%= siswa?.nisn %></div>
+
+    <div class="info-label">Nama Orang Tua/Wali</div>
+    <div class="info-value">: <%= siswa?.nama_ortu %></div>
+
+    <% } else if (role === 'guru') { %>
+    <div class="info-label">NISN</div>
+    <div class="info-value">: <%= siswa?.nisn %></div>
+
+    <div class="info-label">Nama Siswa</div>
+    <div class="info-value">: <%= siswa?.nama %></div>
+
+    <div class="info-label">Kelas</div>
+    <div class="info-value">: <%= siswa?.kelas?.nama_kelas %></div>
+
+    <div></div>
+    <div></div>
+
+    <div class="info-label">Orang Tua</div>
+    <div class="info-value">: <%= siswa?.nama_wali || siswa?.nama_ayah || '-' %></div>
+
+    <div></div>
+    <div></div>
+
+    <% } else if (role === 'orang_tua') { %>
+    <div class="info-label">Nama Siswa</div>
+    <div class="info-value">: <%= siswa?.nama %></div>
+
+    <div class="info-label">Tahun Ajaran</div>
+    <div class="info-value">
+      : <%= (typeof tahun_ajaran !== 'undefined' && tahun_ajaran?.nama_tahun_ajaran) ?
+      tahun_ajaran.nama_tahun_ajaran : '-' %>
+    </div>
+
+    <div class="info-label">NISN</div>
+    <div class="info-value">: <%= siswa?.nisn %></div>
+
+    <div class="info-label">Semester</div>
+    <div class="info-value">: <%= (typeof semester !== 'undefined') ? semester : '-' %></div>
+
+    <div class="info-label">Kelas</div>
+    <div class="info-value">: <%= siswa?.kelas?.nama_kelas %></div>
+
+    <div class="info-label">Guru Wali Kelas</div>
+    <div class="info-value">: <%= wali_kelas || '-' %></div>
+
+    <% } else { %>
+    <div class="info-label">Nama Siswa</div>
+    <div class="info-value">: <%= siswa?.nama %></div>
+    <div class="info-label">NISN</div>
+    <div class="info-value">: <%= siswa?.nisn %></div>
+    <% } %>
+  </div>
+</div>

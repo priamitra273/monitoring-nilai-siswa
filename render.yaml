@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: monitoring-nilai-siswa-ta
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /api/health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true

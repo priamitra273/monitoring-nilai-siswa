@@ -1,0 +1,33 @@
+<!-- FOOTER -->
+<div class="footer-section">
+  <table class="signature-table">
+    <tr>
+      <td style="padding: 20px">
+        <p><strong>Mengetahui,</strong></p>
+        <p style="margin-top: 50px"><strong>Kepala Sekolah</strong></p>
+        <p style="margin-top: 10px">_____________________</p>
+      </td>
+      <td style="padding: 20px">
+        <p><strong>Guru Kelas</strong></p>
+        <p style="margin-top: 50px">
+          <strong><%= siswa?.guru_kelas?.nama_lengkap || 'Nama Guru' %></strong>
+        </p>
+        <p style="margin-top: 10px">_____________________</p>
+      </td>
+      <td style="padding: 20px">
+        <p><strong>Orang Tua/Wali</strong></p>
+        <p style="margin-top: 50px">
+          <strong><%= siswa?.ortu?.nama_ibu || 'Nama Orang Tua' %></strong>
+        </p>
+        <p style="margin-top: 10px">_____________________</p>
+      </td>
+    </tr>
+  </table>
+
+  <div class="footer-text">
+    <p style="text-align: center; font-size: 10px; color: #666; margin-top: 30px">
+      Tanggal Cetak: <%= new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric',
+      month: 'long', day: 'numeric' }) %>
+    </p>
+  </div>
+</div>

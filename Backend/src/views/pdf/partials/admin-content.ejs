@@ -1,0 +1,35 @@
+<!-- ADMIN CONTENT -->
+<div class="admin-content">
+  <%- include('./data-siswa') %> <%- include('./nilai-table') %> <%- include('./attendance-summary')
+  %> <% if (typeof absensi_detail !== 'undefined' && absensi_detail && absensi_detail.length > 0) {
+  %>
+  <div class="attendance-detail-section">
+    <h3>DETAIL KEHADIRAN BULANAN</h3>
+    <table class="attendance-detail-table">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Status</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% absensi_detail.forEach((abs) => { %>
+        <tr>
+          <td>
+            <%= new Date(abs.tanggal).toLocaleDateString('id-ID', { weekday: 'short', day:
+            '2-digit', month: 'short', year: 'numeric' }) %>
+          </td>
+          <td style="text-align: center">
+            <span class="status-badge status-<%= abs.status?.toLowerCase().replace(/\s+/g, '-') %>">
+              <%= abs.status %>
+            </span>
+          </td>
+          <td><%= abs.keterangan || '-' %></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>

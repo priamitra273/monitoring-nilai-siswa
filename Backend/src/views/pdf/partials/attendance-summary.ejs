@@ -1,0 +1,33 @@
+<!-- ATTENDANCE SUMMARY -->
+<div class="attendance-section">
+  <h3>RINGKASAN KEHADIRAN</h3>
+  <div class="attendance-grid">
+    <div class="attendance-card">
+      <div class="attendance-icon">P</div>
+      <div class="attendance-label">HADIR</div>
+      <div class="attendance-value"><%= absensi?.hadir || 0 %></div>
+      <div class="attendance-day">hari</div>
+    </div>
+
+    <div class="attendance-card">
+      <div class="attendance-icon">I</div>
+      <div class="attendance-label">IZIN</div>
+      <div class="attendance-value"><%= absensi?.izin || 0 %></div>
+      <div class="attendance-day">hari</div>
+    </div>
+
+    <div class="attendance-card">
+      <div class="attendance-icon">S</div>
+      <div class="attendance-label">SAKIT</div>
+      <div class="attendance-value"><%= absensi?.sakit || 0 %></div>
+      <div class="attendance-day">hari</div>
+    </div>
+
+    <div class="attendance-card">
+      <div class="attendance-icon">A</div>
+      <div class="attendance-label">ALPA</div>
+      <div class="attendance-value"><%= absensi?.alpa || 0 %></div>
+      <div class="attendance-day">hari</div>
+    </div>
+  </div>
+</div>

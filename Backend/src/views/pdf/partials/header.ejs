@@ -1,0 +1,31 @@
+<!-- HEADER -->
+<div class="header-section">
+  <div class="logo-section">
+    <% if (logoBase64) { %>
+    <img src="data:image/png;base64,<%= logoBase64 %>" alt="Logo" />
+    <% } else { %>
+    <div
+      style="
+        width: 80px;
+        height: 80px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+      "
+    >
+      Logo SD
+    </div>
+    <% } %>
+  </div>
+  <div class="header-title">
+    <h2>TRANSKRIP NILAI SISWA</h2>
+    <h3>SDN 1 LANGENSARI</h3>
+    <p>
+      Jl. Cipanas, Kp. Korobokan, Cimanganten, Kec. Tarogong Kaler, Kabupaten Garut, Jawa Barat
+      44151
+    </p>
+  </div>
+</div>

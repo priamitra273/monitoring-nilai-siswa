@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Perkembangan Siswa</title>
+    <style>
+      <%- cssContent %>
+    </style>
+  </head>
+  <body>
+    <div class="laporan-container">
+      <!-- HEADER UNIVERSAL -->
+      <%- include('./partials/header') %>
+
+      <!-- CONTENT BY ROLE (Guru/Ortu only) -->
+      <% if (role === 'guru') { %> <%- include('./partials/guru-content') %> <% } else if (role ===
+      'ortu') { %> <%- include('./partials/ortu-content') %> <% } %>
+
+      <!-- FOOTER UNIVERSAL -->
+      <%- include('./partials/footer') %>
+    </div>
+  </body>
+</html>

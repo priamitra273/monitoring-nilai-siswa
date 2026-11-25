@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transkrip Nilai Siswa</title>
+    <style>
+      <%- cssContent %>
+    </style>
+  </head>
+  <body>
+    <div class="laporan-container">
+      <%- include('./partials/header') %> <%- include('./partials/data-siswa') %>
+
+      <div class="admin-transkrip-content">
+        <% if (riwayat_nilai && riwayat_nilai.length > 0) { %> <%
+        riwayat_nilai.forEach(function(tahunData) { %>
+        <div class="semester-block">
+          <div class="semester-header">
+            Tahun Ajaran: <%= tahunData.tahun_ajaran %> | Semester: <%= tahunData.semester %>
+          </div>
+
+          <table class="riwayat-nilai-table">
+            <thead>
+              <tr>
+                <th style="width: 5%">No</th>
+                <th style="width: 45%">Mata Pelajaran</th>
+                <th style="width: 15%">Nilai Akhir</th>
+                <th style="width: 10%">Predikat</th>
+                <th style="width: 25%">Guru Pengajar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (tahunData.nilai && tahunData.nilai.length > 0) { %> <%
+              tahunData.nilai.forEach(function(nilai, index) { %>
+              <tr>
+                <td style="text-align: center"><%= index + 1 %></td>
+                <td><%= nilai.nama_mapel %></td>
+                <td style="text-align: center"><%= nilai.nilai_akhir %></td>
+                <td style="text-align: center"><%= nilai.grade %></td>
+                <td style="text-align: center"><%= nilai.guru_nama %></td>
+              </tr>
+              <% }); %> <% } else { %>
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 10px">Belum ada data nilai</td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+
+          <% var absenCurrent = null; if (typeof absensi !== 'undefined' && Array.isArray(absensi))
+          { absenCurrent = absensi.find(function(a) { return a.tahun_ajaran_id ===
+          tahunData.tahun_ajaran_id; }); } %> <% if (absenCurrent) { %>
+          <div style="margin-top: 5px; font-weight: bold; font-size: 10px">Kehadiran:</div>
+          <table class="absensi-table">
+            <tr>
+              <td class="absensi-header">Sakit</td>
+              <td style="text-align: center"><%= absenCurrent.sakit || 0 %> hari</td>
+            </tr>
+            <tr>
+              <td class="absensi-header">Izin</td>
+              <td style="text-align: center"><%= absenCurrent.izin || 0 %> hari</td>
+            </tr>
+            <tr>
+              <td class="absensi-header">Tanpa Keterangan</td>
+              <td style="text-align: center"><%= absenCurrent.alpha || 0 %> hari</td>
+            </tr>
+          </table>
+          <% } %>
+        </div>
+        <% }); %> <% } else { %>
+        <div class="no-data" style="text-align: center; padding: 50px">
+          <p>Belum ada riwayat nilai untuk siswa ini.</p>
+        </div>
+        <% } %>
+
+        <div class="signature-section">
+          <div class="sign-column">
+            <div class="date">
+              &nbsp;<br />
+              Mengetahui,<br />
+              Wali Kelas
+            </div>
+            <div class="sign-title"></div>
+            <div class="sign-name">
+              <%= (siswa && siswa.wali_kelas_nama) ? siswa.wali_kelas_nama :
+              '..........................' %>
+            </div>
+            <div class="sign-nip">
+              NIP. <%= (siswa && siswa.wali_kelas_nip) ? siswa.wali_kelas_nip : '................'
+              %>
+            </div>
+          </div>
+
+          <div class="sign-column">
+            <div class="date">
+              Garut, <%= tanggal_cetak %><br />
+              Mengetahui,<br />
+              Kepala Sekolah
+            </div>
+            <div class="sign-title"></div>
+            <div class="sign-name">HJ. NINING KARNINGSIH, S.Pd., SD.</div>
+            <div class="sign-nip">NIP. 19650307 198610 2 004</div>
+          </div>
+        </div>
+
+        <%- include('./partials/footer') %>
+      </div>
+    </div>
+  </body>
+</html>
